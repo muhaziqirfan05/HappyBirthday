@@ -89,6 +89,11 @@
             z-index: 10000;
             transition: transform 0.6s linear, opacity 0.6s linear;
         }
+
+        @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
     </style>
 </head>
 <body>
@@ -189,11 +194,24 @@
                 <div class="text-8xl mb-4 float-anim">🎁</div>
                 <p class="font-black text-pink-500 tracking-widest">[ TAP YOUR GIFT ]</p>
             </div>
-            <div id="tbc-banner" class="hidden">
-                <div class="bg-yellow-400 text-white font-black text-xl px-8 py-4 inline-block rotate-[-2deg] rounded-xl shadow-xl animate-bounce">
-                    HAVE A GOOD JOURNEY AHEAD, LYA! WISH YOU THE BEST LUCK IN EVERYTHING YOU DO! 🌟
-                </div>
+            <div id="tbc-banner" class="hidden flex justify-center items-center py-10 px-6">
+    <div class="relative bg-gradient-to-br from-pink-400 to-yellow-300 p-1 rounded-[2rem] shadow-[0_0_20px_rgba(255,126,185,0.5)] animate-pulse">
+        <div class="bg-white p-8 rounded-[1.8rem] text-center max-w-xs border-2 border-white/50">
+            <div class="text-6xl mb-4">⭐</div>
+            <h2 class="text-2xl font-black text-pink-500 uppercase leading-tight" style="font-family: 'Bungee';">
+                Level 21<br>Unlocked
+            </h2>
+            <div class="h-1 w-full bg-pink-100 my-4 rounded-full overflow-hidden">
+                <div class="h-full bg-pink-500 w-full animate-[shimmer_2s_infinite]"></div>
             </div>
+            <p class="text-gray-600 font-bold text-sm tracking-widest uppercase">
+                Status: Legendary<br>
+                Luck: Infinite ✨
+            </p>
+            <p class="mt-6 text-xs italic text-pink-400 font-medium">"Subject Lya has successfully level up this year."</p>
+        </div>
+    </div>
+</div>
         </section>
     </div>
 
