@@ -79,6 +79,16 @@
         /* Bar styling */
         .haki-bar { height: 18px; background: #e5e7eb; border-radius: 20px; overflow: hidden; border: 2px solid #4a4a4a; }
         .haki-fill { height: 100%; width: 0; transition: width 2s ease-out; }
+
+        .cursor-sparkle {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10000;
+            transition: transform 0.6s linear, opacity 0.6s linear;
+        }
     </style>
 </head>
 <body>
@@ -98,7 +108,7 @@
             <div class="big-cake float-anim" onclick="launch()">🎂</div>
         </div>
         
-        <h2 class="mt-10 text-pink-500 font-black tracking-tight animate-pulse text-center">
+        <h2 class="mt-10 text-pink-500 font-black tracking-tight text-center">
             <span class="text-3xl block mb-2 uppercase">Happy Birthday!</span>
             <span class="text-lg font-bold">CLOSE YOUR EYES AND MAKE A WISH...</span>
             <span class="text-lg font-bold">CLICK THE CAKE TO START!</span>
@@ -107,11 +117,11 @@
 
     <div id="main-content" class="hidden relative z-10">
         
-        <section class="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#fde047]/80">
+        <section class="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#fefce8]/90">
             <h1 class="text-5xl font-black uppercase text-pink-500" style="font-family: 'Bungee';">
-                Happy<br>Birthday<br><span class="text-white drop-shadow-md">Lya!!</span>
+                Happy<br>Birthday<br><span class="text-gray drop-shadow-md">Lya!!</span>
             </h1>
-            <p class="text-xl mt-6 font-bold text-pink-600 bg-white/50 px-4 py-1 rounded-full">THE MOST CHEERFUL PERSON ✨</p>
+            <p class="text-xl mt-6 font-bold text-pink-600 bg-[#fde047]/80 px-4 py-1 rounded-full">THE MOST CHEERFUL PERSON ✨</p>
         </section>
 
         <section class="py-16 px-6 bg-[#fff0f6]/90">
@@ -271,6 +281,41 @@
             document.getElementById('final-action').style.display = 'none';
             document.getElementById('tbc-banner').classList.remove('hidden');
         }
+
+        // Cursor Animation Logic
+function createSparkle(e) {
+    const colors = ['#ff7eb9', '#fde047', '#ffffff', '#ff0080'];
+    const sparkle = document.createElement('div');
+    sparkle.className = 'cursor-sparkle';
+    
+    // Get position for both Mouse and Touch
+    let x = e.clientX || (e.touches && e.touches[0].clientX);
+    let y = e.clientY || (e.touches && e.touches[0].clientY);
+    
+    if (!x || !y) return;
+
+    sparkle.style.left = x + 'px';
+    sparkle.style.top = y + 'px';
+    sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    
+    document.body.appendChild(sparkle);
+
+    // Animate out
+    setTimeout(() => {
+        sparkle.style.transform = `translate(${(Math.random() - 0.5) * 50}px, ${(Math.random() - 0.5) * 50}px) scale(0)`;
+        sparkle.style.opacity = '0';
+    }, 50);
+
+    // Remove from DOM
+    setTimeout(() => sparkle.remove(), 600);
+}
+
+// Listen for mouse and touch movements
+window.addEventListener('mousemove', createSparkle);
+window.addEventListener('touchmove', (e) => {
+    // We don't want to spam TOO many particles on touch, so we filter
+    if (Math.random() > 0.5) createSparkle(e);
+}, { passive: true });
     </script>
 </body>
 </html>
