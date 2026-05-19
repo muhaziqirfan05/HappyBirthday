@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Happy Birthday Lya!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -10,272 +10,264 @@
     
     <style>
         :root { 
-            --soft-pink: #ffdae9; 
             --bright-pink: #ff7eb9; 
             --yellow: #fde047; 
-            --white: #ffffff;
-            --text-dark: #4a4a4a;
+            --pale-pink: #fff0f6;
+            --pale-yellow: #fefce8;
         }
         
         body { 
             font-family: 'Fredoka', sans-serif; 
-            background-color: var(--white); 
-            color: var(--text-dark);
+            background-color: #fff; 
+            color: #4a4a4a;
             overflow-x: hidden;
-            cursor: none; /* Custom cursor trail active */
+            width: 100vw;
         }
 
-        /* LIGHT-THEME FIREWORKS */
-        #fw-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; pointer-events: none; opacity: 0.4;
+        /* RANDOM EMOJI SPAM ANIMATION */
+        @keyframes drift {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(50px, 100px) rotate(90deg); }
+            50% { transform: translate(-50px, 200px) rotate(180deg); }
+            75% { transform: translate(100px, 50px) rotate(270deg); }
+            100% { transform: translate(0, 0) rotate(360deg); }
         }
 
-        /* FLOAT ANIMATION */
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        .float-anim { animation: float 3s ease-in-out infinite; }
-
-        /* HERO STYLING */
-        .hero-title { font-size: clamp(3rem, 12vw, 8rem); color: var(--bright-pink); line-height: 0.9; }
-
-        /* CASUAL CARDS */
-        .casual-card {
-            background: var(--white);
-            border: 4px solid var(--bright-pink);
-            border-radius: 1.5rem;
-            box-shadow: 8px 8px 0px var(--yellow);
-            transition: transform 0.3s ease;
-        }
-        .casual-card:hover { transform: scale(1.03) rotate(1deg); }
-
-        /* PROGRESS BARS */
-        .haki-bar { height: 16px; background: #f0f0f0; border-radius: 20px; overflow: hidden; border: 2px solid var(--text-dark); }
-        .haki-fill { height: 100%; width: 0; transition: width 2s cubic-bezier(0.1, 0, 0, 1); }
-
-        /* ROADMAP LINE */
-        .roadmap-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 6px; background: var(--soft-pink); transform: translateX(-50%); z-index: -1; }
-
-        /* SPARKLE TRAIL */
-        .sparkle {
+        .spam-emoji {
             position: fixed;
-            width: 8px; height: 8px;
-            border-radius: 50%;
             pointer-events: none;
-            z-index: 9999;
-            transition: transform 0.5s, opacity 0.5s;
+            z-index: 1;
+            opacity: 0.4;
+            animation: drift 15s linear infinite;
         }
+
+        /* FLOATING CARDS ANIMATION */
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(2deg); }
+        }
+        .casual-card {
+            background: white;
+            border: 3px solid var(--bright-pink);
+            border-radius: 1.25rem;
+            box-shadow: 5px 5px 0px var(--yellow);
+            transition: all 0.3s ease;
+            animation: cardFloat 4s ease-in-out infinite;
+        }
+        /* Staggered animation for cards */
+        .casual-card:nth-child(even) { animation-delay: 1s; }
+        .casual-card:nth-child(3n) { animation-delay: 2s; }
+
+        /* CAKE & BOUQUET */
+        .big-cake { font-size: 15rem; cursor: pointer; z-index: 10; position: relative; }
+        .side-bouquet { font-size: 6rem; position: absolute; bottom: 0; left: -40px; z-index: 5; }
+
+        @keyframes mainFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-25px); }
+        }
+        .float-anim { animation: mainFloat 3s ease-in-out infinite; }
 
         #opening-screen {
-            position: fixed; inset: 0; background: var(--white); z-index: 9999;
+            position: fixed; inset: 0; background: var(--pale-yellow); z-index: 9999;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
+        #bg-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
         .hidden { display: none; }
+        
+        /* Bar styling */
+        .haki-bar { height: 18px; background: #e5e7eb; border-radius: 20px; overflow: hidden; border: 2px solid #4a4a4a; }
+        .haki-fill { height: 100%; width: 0; transition: width 2s ease-out; }
     </style>
 </head>
-<body onmousemove="createSparkle(event)">
+<body>
 
-    <canvas id="fw-canvas"></canvas>
+    <canvas id="bg-particles"></canvas>
 
     <div id="opening-screen">
-        <div class="float-anim" style="font-size: 8rem; cursor: pointer;" onclick="launch()">🎂</div>
-        <h2 class="mt-8 text-pink-400 font-bold tracking-widest animate-pulse text-center px-6">
-            Close your eyes and make a wish... <br> Then click the cake to see!
+        <div class="spam-emoji text-5xl" style="top:5%; left:5%;">💐</div>
+        <div class="spam-emoji text-4xl" style="top:15%; right:10%;">✨</div>
+        <div class="spam-emoji text-5xl" style="bottom:20%; left:10%;">🎀</div>
+        <div class="spam-emoji text-4xl" style="bottom:5%; right:15%;">🎉</div>
+        <div class="spam-emoji text-3xl" style="top:50%; left:2%;">🍭</div>
+        <div class="spam-emoji text-4xl" style="top:30%; right:5%;">🧁</div>
+
+        <div class="relative flex items-center justify-center">
+            <div class="side-bouquet float-anim">💐</div>
+            <div class="big-cake float-anim" onclick="launch()">🎂</div>
+        </div>
+        
+        <h2 class="mt-10 text-pink-500 font-black tracking-tight animate-pulse text-center">
+            <span class="text-3xl block mb-2 uppercase">Happy Birthday!</span>
+            <span class="text-lg font-bold">CLOSE YOUR EYES AND MAKE A WISH...</span>
+            <span class="text-lg font-bold">CLICK THE CAKE TO START!</span>
         </h2>
     </div>
 
-    <div id="main-content" class="hidden">
+    <div id="main-content" class="hidden relative z-10">
         
-        <section class="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-            <div data-aos="zoom-out">
-                <span class="bg-yellow-300 text-white px-6 py-1 rounded-full font-bold text-sm tracking-widest mb-4 inline-block">
-                YOU DESERVE THE BEST BIRTHDAY EVER, LYA!
-                </span>
-                <h1 class="hero-title font-black" style="font-family: 'Bungee';">
-                    Happy Birthday <br> <span class="text-yellow-400">Lya!!</span>
-                </h1>
-                <p class="text-xl mt-6 font-bold text-pink-400 opacity-0 transition-opacity duration-1000" id="hero-tag">
-                    THE MOST HAPPY LOOKING PERSON IN THE CLASS
-                </p>
-            </div>
+        <section class="min-h-screen flex flex-col items-center justify-center p-6 text-center bg-[#fde047]/80">
+            <h1 class="text-5xl font-black uppercase text-pink-500" style="font-family: 'Bungee';">
+                Happy<br>Birthday<br><span class="text-white drop-shadow-md">Lya!!</span>
+            </h1>
+            <p class="text-xl mt-6 font-bold text-pink-600 bg-white/50 px-4 py-1 rounded-full">THE MOST CHEERFUL PERSON ✨</p>
         </section>
 
-        <section class="py-20 px-6 max-w-4xl mx-auto">
-            <h2 class="text-3xl font-black mb-12 text-center text-pink-500" style="font-family: 'Bungee';">[SECTION TITLE]</h2>
-            <div class="space-y-10">
-                <div data-aos="fade-right">
-                    <div class="flex justify-between mb-2 font-bold text-pink-500">
-                        <span>FUNNY</span><span>85%</span>
-                    </div>
-                    <div class="haki-bar"><div class="haki-fill bg-pink-400 bar-trigger" data-width="85%"></div></div>
+        <section class="py-16 px-6 bg-[#fff0f6]/90">
+            <h2 class="text-3xl font-black mb-10 text-center text-pink-500" style="font-family: 'Bungee';">VIBE CHECK</h2>
+            <div class="max-w-md mx-auto space-y-6">
+                <div class="casual-card p-4">
+                    <div class="flex justify-between mb-2 font-bold text-pink-600"><span>FUNNY</span><span>85%</span></div>
+                    <div class="haki-bar"><div class="haki-fill bg-pink-500" id="bar1" data-width="85%"></div></div>
                 </div>
-                <div data-aos="fade-right" data-aos-delay="200">
-                    <div class="flex justify-between mb-2 font-bold text-yellow-500">
-                        <span>POSITIVE VIBE</span><span>100%</span>
-                    </div>
-                    <div class="haki-bar"><div class="haki-fill bg-yellow-400 bar-trigger" data-width="100%"></div></div>
+                <div class="casual-card p-4">
+                    <div class="flex justify-between mb-2 font-bold text-yellow-600"><span>POSITIVE</span><span>100%</span></div>
+                    <div class="haki-bar"><div class="haki-fill bg-yellow-400" id="bar2" data-width="100%"></div></div>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 px-6 bg-pink-50/50">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-                <div class="casual-card p-6 text-center float-anim" data-aos="fade-up" style="animation-delay: 0s">
+        <section class="py-16 px-4 bg-[#fefce8]/90">
+            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                <div class="casual-card p-4 text-center">
                     <p class="text-4xl mb-2">🍦</p>
-                    <h3 class="font-bold text-pink-500 text-sm">Donno wht to put</h3>
-                    <p class="text-lg font-black">Donno wht to put</p>
+                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">dunno</h3>
+                    <p class="text-sm font-black">dunno</p>
                 </div>
-                <div class="casual-card p-6 text-center float-anim" data-aos="fade-up" style="animation-delay: 0.5s">
+                <div class="casual-card p-4 text-center">
                     <p class="text-4xl mb-2">✨</p>
-                    <h3 class="font-bold text-pink-500 text-sm">ENERGY TYPE</h3>
-                    <p class="text-lg font-black">CHILL LIKE CAPYBARA</p>
+                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">Energy</h3>
+                    <p class="text-sm font-black">CHILL LIKE A CAPYBARA</p>
                 </div>
-                <div class="casual-card p-6 text-center float-anim" data-aos="fade-up" style="animation-delay: 1s">
+                <div class="casual-card p-4 text-center">
                     <p class="text-4xl mb-2">🎀</p>
-                    <h3 class="font-bold text-pink-500 text-sm">Donno wht to put</h3>
-                    <p class="text-lg font-black">Donno wht to put</p>
+                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">dunno</h3>
+                    <p class="text-sm font-black">dunno</p>
                 </div>
-                <div class="casual-card p-6 text-center float-anim" data-aos="fade-up" style="animation-delay: 1.5s">
+                <div class="casual-card p-4 text-center">
                     <p class="text-4xl mb-2">🍯</p>
-                    <h3 class="font-bold text-pink-500 text-sm">Donno wht to put</h3>
-                    <p class="text-lg font-black">Donno wht to put</p>
+                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">dunno</h3>
+                    <p class="text-sm font-black">dunno</p>
                 </div>
             </div>
         </section>
 
-        <section class="py-20 px-6 relative">
-            <div class="roadmap-line"></div>
-            <div class="max-w-4xl mx-auto space-y-24">
-                <div class="flex items-center gap-8" data-aos="zoom-in-right">
-                    <div class="text-5xl float-anim">⛅</div>
-                    <div class="casual-card flex-1 p-6">
-                        <h3 class="font-black text-pink-400">THE FIRST DAY BEING CLASSMATE</h3>
-                        <p class="text-sm opacity-70">tbc</p>
-                    </div>
-                </div>
-                <div class="flex items-center gap-8 flex-row-reverse" data-aos="zoom-in-left">
-                    <div class="text-5xl float-anim" style="animation-delay: 1s">⭐</div>
-                    <div class="casual-card flex-1 p-6 text-right">
-                        <h3 class="font-black text-yellow-500">THE LAST DAY BEING CLASSMATE</h3>
-                        <p class="text-sm opacity-70">tbc</p>
-                    </div>
-                </div>
+        <section class="py-16 px-4 bg-[#fff0f6]/90">
+            <h2 class="text-3xl font-black mb-8 text-center text-pink-500" style="font-family: 'Bungee';">GALLERY</h2>
+            <div class="grid grid-cols-2 gap-3 max-w-md mx-auto">
+                <div class="casual-card h-40 overflow-hidden"><img src="https://via.placeholder.com/300" class="w-full h-full object-cover"></div>
+                <div class="casual-card h-40 overflow-hidden mt-4"><img src="https://via.placeholder.com/301" class="w-full h-full object-cover"></div>
+                <div class="casual-card h-40 overflow-hidden -mt-4"><img src="https://via.placeholder.com/302" class="w-full h-full object-cover"></div>
+                <div class="casual-card h-40 overflow-hidden"><img src="https://via.placeholder.com/303" class="w-full h-full object-cover"></div>
             </div>
         </section>
 
-        <section class="py-20 px-6">
-            <h2 class="text-center text-3xl font-black mb-12 text-pink-500" style="font-family: 'Bungee';">MEMORY</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <div class="casual-card p-2 overflow-hidden hover:rotate-3 transition-transform" data-aos="zoom-in">
-                    <img src="https://via.placeholder.com/400" class="rounded-xl w-full aspect-square object-cover">
-                </div>
-                <div class="casual-card p-2 overflow-hidden hover:-rotate-3 transition-transform" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="https://via.placeholder.com/400" class="rounded-xl w-full aspect-square object-cover">
-                </div>
-                <div class="casual-card p-2 overflow-hidden hover:rotate-3 transition-transform" data-aos="zoom-in" data-aos-delay="400">
-                    <img src="https://via.placeholder.com/400" class="rounded-xl w-full aspect-square object-cover">
-                </div>
+        <section class="py-16 px-6 bg-[#fefce8]/90">
+            <div class="casual-card p-8 text-center border-yellow-400">
+                <h2 class="text-4xl font-bold mb-4 text-pink-400" style="font-family: 'Gaegu';">Dear Lya,</h2>
+                <p class="text-lg italic text-gray-700">"Happy Birthday! I was bored and practicing some code, so you become my test subject for this project lol. Luckily for you, the Pink-Yellow aesthetic actually fits. Hope you have the best day-you definitely earned the 'MVP' title this year! Rememberto always love yourself and cherish the one around you! Hope you have the best luck lol."</p>
+                <div class="mt-4 text-4xl">💐💐💐</div>
             </div>
         </section>
 
-        <section class="py-20 px-6 flex justify-center">
-            <div class="casual-card max-w-2xl p-10 text-center border-yellow-300" data-aos="fade-up">
-                <h2 class="text-4xl font-bold mb-6 text-pink-400" style="font-family: 'Gaegu';">DEAR LYA,</h2>
-                <p class="text-xl italic leading-relaxed text-gray-600">
-                    "Happy Birthday! I was bored and practicing some code, so you became my test subject for this project lol. Luckily for you, the Pink-Yellow aesthetic actually fits. Hope you have the best day—you definitely earned the 'MVP' title this year! Remember to always love yourself and cherish the one around you. Hope you have the best luck lol."
-                </p>
-            </div>
-        </section>
-
-        <section class="py-32 px-6 text-center">
-            <div id="final-action" onclick="finish()" class="cursor-pointer float-anim">
-                <div class="text-9xl mb-4">🎁</div>
-                <p class="font-bold text-pink-400">[CLICK ME]</p>
+        <section class="py-20 px-6 text-center bg-[#fefce8]/90">
+            <div id="final-action" onclick="finish()" class="cursor-pointer">
+                <div class="text-8xl mb-4 float-anim">🎁</div>
+                <p class="font-black text-pink-500 tracking-widest">[ TAP YOUR GIFT ]</p>
             </div>
             <div id="tbc-banner" class="hidden">
-                <div class="bg-yellow-400 text-white font-black text-4xl px-12 py-4 inline-block rotate-[-2deg] rounded-lg animate-bounce">
-                    HAVE A GOOD JOURNEY AHEAD, LYA! WISH YOU THE BEST LUCK IN EVERYTHING YOU DO!! 
+                <div class="bg-yellow-400 text-white font-black text-xl px-8 py-4 inline-block rotate-[-2deg] rounded-xl shadow-xl animate-bounce">
+                    HAVE A GOOD JOURNEY AHEAD, LYA! WISH YOU THE BEST LUCK IN EVERYTHING YOU DO! 🌟
                 </div>
             </div>
         </section>
-
     </div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     
     <script>
-        AOS.init({ duration: 1000, once: true });
+        AOS.init();
 
-        // MOUSE SPARKLE TRAIL
-        function createSparkle(e) {
-            const colors = ['#ffdae9', '#ff7eb9', '#fde047'];
-            const sparkle = document.createElement('div');
-            sparkle.className = 'sparkle';
-            sparkle.style.left = e.clientX + 'px';
-            sparkle.style.top = e.clientY + 'px';
-            sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            document.body.appendChild(sparkle);
-            
-            setTimeout(() => {
-                sparkle.style.transform = `translate(${(Math.random()-0.5)*50}px, ${(Math.random()-0.5)*50}px) scale(0)`;
-                sparkle.style.opacity = '0';
-            }, 50);
-            setTimeout(() => sparkle.remove(), 600);
+        // PART 1: SPAM EMOJIS
+        const emojis = ['💐', '✨', '💖', '🎂', '🎀', '🎉', '🍭', '🧁', '🌸'];
+        const opening = document.getElementById('opening-screen');
+        
+        for (let i = 0; i < 20; i++) {
+            const div = document.createElement('div');
+            div.className = 'spam-emoji';
+            div.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            div.style.left = Math.random() * 100 + 'vw';
+            div.style.top = Math.random() * 100 + 'vh';
+            div.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+            div.style.animationDuration = (Math.random() * 10 + 10) + 's';
+            div.style.animationDelay = (Math.random() * 5) + 's';
+            opening.appendChild(div);
         }
 
-        // FIREWORKS
-        const canvas = document.getElementById('fw-canvas');
+        // PART 2: PARTICLE SYSTEM
+        const canvas = document.getElementById('bg-particles');
         const ctx = canvas.getContext('2d');
-        let particles = [];
-        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.addEventListener('resize', resize); resize();
+        let dots = [];
 
-        class Particle {
-            constructor(x, y, color) {
-                this.x = x; this.y = y; this.color = color;
-                this.velocity = { x: (Math.random()-0.5)*4, y: (Math.random()-0.5)*4 };
-                this.alpha = 1;
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Dot {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = (Math.random() - 0.5) * 2;
+                this.speedY = (Math.random() - 0.5) * 2;
+                this.color = Math.random() > 0.5 ? '#ff7eb9' : '#fde047';
             }
-            draw() { ctx.globalAlpha = this.alpha; ctx.fillStyle = this.color; ctx.beginPath(); ctx.arc(this.x, this.y, 2, 0, Math.PI*2); ctx.fill(); }
-            update() { this.x += this.velocity.x; this.y += this.velocity.y; this.alpha -= 0.01; }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
 
-        function animateFW() {
-            requestAnimationFrame(animateFW);
+        for (let i = 0; i < 50; i++) dots.push(new Dot());
+
+        function animate() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (Math.random() < 0.04) {
-                const colors = ['#ffdae9', '#ff7eb9', '#fde047'];
-                for(let i=0; i<15; i++) particles.push(new Particle(Math.random()*canvas.width, Math.random()*canvas.height, colors[Math.floor(Math.random()*3)]));
-            }
-            particles.forEach((p, i) => { if(p.alpha > 0) { p.update(); p.draw(); } else particles.splice(i,1); });
-        }
-
-        // SCROLL TRIGGER FOR BARS
-        window.addEventListener('scroll', () => {
-            const bars = document.querySelectorAll('.bar-trigger');
-            bars.forEach(bar => {
-                const rect = bar.getBoundingClientRect();
-                if(rect.top < window.innerHeight) {
-                    bar.style.width = bar.getAttribute('data-width');
-                }
+            dots.forEach(dot => {
+                dot.update();
+                dot.draw();
             });
-        });
+            requestAnimationFrame(animate);
+        }
+        animate();
 
         function launch() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#ff7eb9', '#fde047'] });
-            document.getElementById('opening-screen').style.display = 'none';
-            document.getElementById('main-content').classList.remove('hidden');
-            document.getElementById('hero-tag').style.opacity = '1';
-            animateFW();
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            document.getElementById('opening-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('opening-screen').style.display = 'none';
+                document.getElementById('main-content').classList.remove('hidden');
+                document.getElementById('bar1').style.width = '85%';
+                document.getElementById('bar2').style.width = '100%';
+            }, 500);
         }
 
         function finish() {
-            confetti({ particleCount: 400, spread: 150, origin: { y: 0.7 }, colors: ['#ff7eb9', '#fde047'] });
+            confetti({ particleCount: 300, spread: 100 });
             document.getElementById('final-action').style.display = 'none';
             document.getElementById('tbc-banner').classList.remove('hidden');
         }
