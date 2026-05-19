@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HBD SCUUBA ✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700&family=Bungee&display=swap" rel="stylesheet">
+    
+    <style>
+        body { 
+            font-family: 'Fredoka', sans-serif; 
+            background: #fff5f8; 
+            color: #4338ca; 
+            overflow-x: hidden; 
+            scroll-behavior: smooth; 
+        }
+
+        /* --- 1. OPENING: BUBBLE CAKE --- */
+        #opening-screen {
+            position: fixed; inset: 0; background: #fff1f2;
+            z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: transform 0.8s cubic-bezier(0.87, 0, 0.13, 1);
+        }
+        .bubble {
+            position: absolute; border-radius: 50%; background: rgba(255, 182, 193, 0.4);
+            animation: rise 4s infinite ease-in; pointer-events: none;
+        }
+        @keyframes rise {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* --- 2. HERO: NEON VIBES --- */
+        .hero-title {
+            font-family: 'Bungee', cursive;
+            background: linear-gradient(to bottom, #ec4899, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 10px 0px rgba(0,0,0,0.05));
+        }
+
+        /* --- 3. DANCING SCUUBA NICK --- */
+        .scuuba-nick {
+            position: fixed; width: 140px; z-index: 100;
+            display: none; bottom: 10%;
+        }
+        #nick-left { left: 5%; }
+        #nick-right { right: 5%; }
+
+        /* --- 4. GLASS LETTER --- */
+        .glass-letter {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border: 2px solid white;
+            border-radius: 40px;
+            box-shadow: 0 20px 40px rgba(236, 72, 153, 0.1);
+        }
+
+        /* Mobile Adjustments */
+        @media (max-width: 768px) {
+            .scuuba-nick { width: 80px; bottom: 5%; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="hbd-song" loop><source src="https://www.myinstants.com/media/sounds/happy-birthday-trap-remix.mp3"></audio>
+    <audio id="scuuba-song" loop><source src="https://www.myinstants.com/media/sounds/scuuba-scuuba.mp3"></audio>
+
+    <div id="opening-screen">
+        <div id="bubble-container"></div> <div class="text-center z-10" onclick="blowCandle()">
+            <div class="relative inline-block cursor-pointer hover:scale-110 transition-transform">
+                <div id="flame" class="text-5xl absolute -top-12 left-1/2 -translate-x-1/2 animate-pulse">🔥</div>
+                <div class="text-9xl">🎂</div>
+            </div>
+            <h2 class="mt-10 text-xl font-bold text-pink-500 uppercase tracking-widest animate-bounce">
+                Click to blow the candle
+            </h2>
+        </div>
+    </div>
+
+    <img src="https://media.tenor.com/7I-K3YxS8gQAAAAi/nick-wilde-zootopia.gif" id="nick-left" class="scuuba-nick">
+    <img src="https://media.tenor.com/7I-K3YxS8gQAAAAi/nick-wilde-zootopia.gif" id="nick-right" class="scuuba-nick">
+
+    <section id="hero" class="h-screen flex flex-col items-center justify-center text-center px-4 hidden">
+        <div data-aos="zoom-in">
+            <h1 class="hero-title text-7xl md:text-[10rem] font-black leading-tight">
+                HAPPY <br> BORTHDAY
+            </h1>
+        </div>
+        <button onclick="openGifts()" class="mt-12 px-12 py-6 bg-indigo-600 text-white font-black rounded-full text-2xl shadow-[0_10px_0_#4338ca] hover:translate-y-2 hover:shadow-none transition-all">
+            OPEN GIFTS 🎁
+        </button>
+    </section>
+
+    <section id="letter-sec" class="min-h-screen flex items-center justify-center p-6 hidden">
+        <div class="glass-letter p-10 md:p-16 max-w-2xl w-full text-center" data-aos="fade-up">
+            <h3 class="text-pink-500 font-bold uppercase tracking-widest text-xs mb-4">Official 67-Aura Gift</h3>
+            <h2 class="text-3xl font-bold mb-6">To [Name] ✨</h2>
+            <p class="text-lg md:text-xl leading-relaxed text-gray-700 italic">
+                "I couldn't just get a normal card, so I brought the Scuuba Nick to back me up. 
+                Hope your day is exactly 10/10 and your aura stays legendary. Stay scuuba!"
+            </p>
+            <div class="mt-8 text-4xl">🗿🎀✨</div>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-20 px-6 max-w-6xl mx-auto hidden">
+        <h2 class="text-center text-5xl font-bold mb-16 text-indigo-600 italic">Memory Archives</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div class="bg-white p-4 rounded-2xl shadow-xl rotate-3" data-aos="flip-left">
+                <img src="https://images.unsplash.com/photo-1518133910546-b6c2fb7d79e3?w=500" class="rounded-lg">
+                <p class="mt-4 text-center font-bold">Absolute Aura</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-xl -rotate-2 mt-8" data-aos="flip-left" data-aos-delay="200">
+                <img src="https://images.unsplash.com/photo-1530103043960-ef38714abb15?w=500" class="rounded-lg">
+                <p class="mt-4 text-center font-bold">The 67 Incident</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl shadow-xl rotate-1" data-aos="flip-left" data-aos-delay="400">
+                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=500" class="rounded-lg">
+                <p class="mt-4 text-center font-bold">10/10 Vibes</p>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script>
+        AOS.init();
+
+        // Generate Bubbles
+        const bubbleContainer = document.getElementById('bubble-container');
+        for(let i=0; i<15; i++) {
+            let b = document.createElement('div');
+            b.className = 'bubble';
+            b.style.left = Math.random() * 100 + 'vw';
+            b.style.width = b.style.height = (Math.random() * 30 + 10) + 'px';
+            b.style.animationDelay = (Math.random() * 4) + 's';
+            bubbleContainer.appendChild(b);
+        }
+
+        const hbdSong = document.getElementById('hbd-song');
+        const scuubaSong = document.getElementById('scuuba-song');
+
+        // Step 1: Blow Candle
+        function blowCandle() {
+            document.getElementById('flame').style.display = 'none';
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            
+            setTimeout(() => {
+                document.getElementById('opening-screen').style.transform = 'translateY(-100%)';
+                document.getElementById('hero').classList.remove('hidden');
+                hbdSong.play();
+            }, 1000);
+        }
+
+        // Step 2: Open Gifts
+        function openGifts() {
+            hbdSong.pause();
+            scuubaSong.play(); // Play the Scuuba Scuuba song!
+            
+            // Show Dancing Nicks
+            document.getElementById('nick-left').style.display = 'block';
+            document.getElementById('nick-right').style.display = 'block';
+            
+            // Show Content
+            document.getElementById('letter-sec').classList.remove('hidden');
+            document.getElementById('gallery').classList.remove('hidden');
+            
+            // Final Blast
+            confetti({ particleCount: 200, spread: 90, origin: { y: 0.8 } });
+            
+            // Scroll to Letter
+            document.getElementById('letter-sec').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
