@@ -73,12 +73,26 @@
             display: flex; flex-direction: column; justify-content: center; align-items: center;
         }
 
-        #bg-particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+        #bg-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Keeps it behind text/buttons */
+            pointer-events: none; /* Allows you to click "through" the background */
+        }
         .hidden { display: none; }
         
         /* Bar styling */
         .haki-bar { height: 18px; background: #e5e7eb; border-radius: 20px; overflow: hidden; border: 2px solid #4a4a4a; }
-        .haki-fill { height: 100%; width: 0; transition: width 2s ease-out; }
+        .haki-fill { 
+            height: 100%; 
+            width: 0; 
+            transition: width 2s cubic-bezier(0.34, 1.56, 0.64, 1); /* The "surge" effect */;
+            border-radius: 20px;
+        } 
 
         .cursor-sparkle {
             position: fixed;
@@ -93,10 +107,38 @@
         @keyframes shimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
-}
+
+    }
+
+    @keyframes zoomIn {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+    }
+
+    @keyframes bounce-down {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(10px); }
+    }
+
+    .scroll-arrow {
+        animation: bounce-down 2s infinite ease-in-out;
+    }
+
+    /* Ensure the Hero section can contain the absolute indicator */
+    #main-content section:first-child {
+        position: relative;
+    }
     </style>
 </head>
 <body>
+
+    <canvas id="bg-particles"></canvas>
 
     <div id="opening-screen" class="flex flex-col justify-start items-center pt-20">
     
@@ -130,48 +172,56 @@
                 Happy<br>Birthday<br><span class="text-gray drop-shadow-md">Lya!!</span>
             </h1>
             <p class="text-xl mt-6 font-bold text-pink-600 bg-[#fde047]/80 px-4 py-1 rounded-full">THE MOST CHEERFUL PERSON </p>
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-80">
+    <p class="text-[10px] font-bold tracking-[0.2em] text-pink-400 uppercase">Scroll Down</p>
+    <div class="scroll-arrow text-2xl text-pink-500">↓</div>
+</div>
         </section>
 
-        <section class="py-16 px-6 bg-[#fff0f6]/90">
-            <h2 class="text-3xl font-black mb-10 text-center text-pink-500" style="font-family: 'Bungee';">VIBE CHECK</h2>
-            <div class="max-w-md mx-auto space-y-6">
-                <div class="casual-card p-4">
-                    <div class="flex justify-between mb-2 font-bold text-pink-600"><span>FUNNY</span><span>85%</span></div>
-                    <div class="haki-bar"><div class="haki-fill bg-pink-500" id="bar1" data-width="85%"></div></div>
-                </div>
-                <div class="casual-card p-4">
-                    <div class="flex justify-between mb-2 font-bold text-yellow-600"><span>POSITIVE</span><span>100%</span></div>
-                    <div class="haki-bar"><div class="haki-fill bg-yellow-400" id="bar2" data-width="100%"></div></div>
-                </div>
+        <section id="vibe-check" class="py-16 px-6 bg-[#fff0f6]/90" data-aos="fade-up">
+    <h2 class="text-3xl font-black mb-10 text-center text-pink-500" style="font-family: 'Bungee';">VIBE CHECK</h2>
+    <div class="max-w-md mx-auto space-y-6">
+        <div class="casual-card p-4" data-aos="flex-right">
+            <div class="flex justify-between mb-2 font-bold text-pink-600"><span>FUNNY</span><span>85%</span></div>
+            <div class="haki-bar">
+                <div class="haki-fill bg-pink-500" id="bar1" style="width: 0%;"></div>
             </div>
-        </section>
+        </div>
+        <div class="casual-card p-4" data-aos="flex-left" data-aos-delay="200">
+            <div class="flex justify-between mb-2 font-bold text-yellow-600"><span>POSITIVE</span><span>100%</span></div>
+            <div class="haki-bar">
+                <div class="haki-fill bg-yellow-400" id="bar2" style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+</section>
 
-        <section class="py-16 px-4 bg-[#fefce8]/90">
+        <section class="py-16 px-4 bg-[#fefce8]/90" data-aos="fade-up">
             <div class="grid grid-cols-2 gap-4 max-w-md mx-auto">
                 <div class="casual-card p-4 text-center">
-                    <p class="text-4xl mb-2">🍦</p>
-                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">dunno</h3>
-                    <p class="text-sm font-black">dunno</p>
+                    <p class="text-4xl mb-2">🧸</p>
+                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">Appearance</h3>
+                    <p class="text-sm font-black">CUTE AND CHARMING</p>
                 </div>
                 <div class="casual-card p-4 text-center">
-                    <p class="text-4xl mb-2">✨</p>
+                    <p class="text-4xl mb-2">🦫</p>
                     <h3 class="text-[10px] text-pink-500 font-bold uppercase">Energy</h3>
                     <p class="text-sm font-black">CHILL LIKE A CAPYBARA</p>
                 </div>
                 <div class="casual-card p-4 text-center">
                     <p class="text-4xl mb-2">🎀</p>
-                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">dunno</h3>
-                    <p class="text-sm font-black">dunno</p>
+                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">Style</h3>
+                    <p class="text-sm font-black">SIMPLE BUT STYLISH 🔥</p>
                 </div>
                 <div class="casual-card p-4 text-center">
-                    <p class="text-4xl mb-2">🍯</p>
-                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">dunno</h3>
-                    <p class="text-sm font-black">dunno</p>
+                    <p class="text-4xl mb-2">🤝</p>
+                    <h3 class="text-[10px] text-pink-500 font-bold uppercase">Social Lite</h3>
+                    <p class="text-sm font-black">FRIENDLY WITH THE WHOLE GALAXY 🌍</p>
                 </div>
             </div>
         </section>
 
-        <section class="py-16 px-4 bg-[#fff0f6]/90">
+        <section class="py-16 px-4 bg-[#fff0f6]/90" data-aos="zoom-in">
             <h2 class="text-3xl font-black mb-8 text-center text-pink-500" style="font-family: 'Bungee';">GALLERY</h2>
             <div class="grid grid-cols-2 gap-3 max-w-md mx-auto">
                 <div class="casual-card h-40 overflow-hidden"><img src="assets/img1.jpeg" class="w-full h-full object-cover"></div>
@@ -181,7 +231,7 @@
             </div>
         </section>
 
-        <section class="py-16 px-6 bg-[#fefce8]/90">
+        <section class="py-16 px-6 bg-[#fefce8]/90" data-aos="fade-up">
             <div class="casual-card p-8 text-center border-yellow-400">
                 <h2 class="text-4xl font-bold mb-4 text-pink-400" style="font-family: 'Gaegu';">Dear Lya,</h2>
                 <p class="text-lg italic text-gray-700">"Happy Birthday! I was bored and practicing some code, so you become my test subject for this project lol. Luckily for you, the Pink-Yellow aesthetic actually fits. Hope you have the best day! You definitely earned the 'MVP' title this year! Remember to always love yourself and cherish the one around you! Hope you have the best luck lol."</p>
@@ -191,8 +241,8 @@
 
         <section class="py-20 px-6 text-center bg-[#fefce8]/90">
             <div id="final-action" onclick="finish()" class="cursor-pointer">
-                <div class="text-8xl mb-4 float-anim">🎁</div>
-                <p class="font-black text-pink-500 tracking-widest">[ TAP YOUR GIFT ]</p>
+                <div class="text-8xl mb-4 float-anim">🎉</div>
+                <p class="font-black text-pink-500 tracking-widest">SPAM IT!!</p>
             </div>
             <div id="tbc-banner" class="hidden flex justify-center items-center py-10 px-6">
     <div class="relative bg-gradient-to-br from-pink-400 to-yellow-300 p-1 rounded-[2rem] shadow-[0_0_20px_rgba(255,126,185,0.5)] animate-pulse">
@@ -221,10 +271,62 @@
     <script>
         AOS.init();
 
+        // PART 0: PARTICLE SYSTEM
+const canvas = document.getElementById('bg-particles');
+const ctx = canvas.getContext('2d');
+let dots = [];
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+
+class Dot {
+    constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = (Math.random() - 0.5) * 1.5;
+        this.speedY = (Math.random() - 0.5) * 1.5;
+        this.color = Math.random() > 0.5 ? '#ff7eb9' : '#fde047';
+    }
+    update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+    }
+    draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+    }
+}
+
+// Create dots and start animation
+for (let i = 0; i < 50; i++) dots.push(new Dot());
+
+function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    dots.forEach(dot => {
+        dot.update();
+        dot.draw();
+    });
+    requestAnimationFrame(animate);
+}
+
+// INITIALIZE PARTICLES
+window.addEventListener('resize', resize);
+resize();
+animate();
+
         // PART 1: SPAM EMOJIS
         const emojis = ['💐', '✨', '💖', '🎂', '🎀', '🎉', '🍭', '🧁', '🌸'];
         const opening = document.getElementById('opening-screen');
-        
+
         for (let i = 0; i < 20; i++) {
             const div = document.createElement('div');
             div.className = 'spam-emoji';
@@ -237,106 +339,95 @@
             opening.appendChild(div);
         }
 
-        // PART 2: PARTICLE SYSTEM
-        const canvas = document.getElementById('bg-particles');
-        const ctx = canvas.getContext('2d');
-        let dots = [];
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        class Dot {
-            constructor() {
-                this.x = Math.random() * canvas.width;
-                this.y = Math.random() * canvas.height;
-                this.size = Math.random() * 3 + 1;
-                this.speedX = (Math.random() - 0.5) * 2;
-                this.speedY = (Math.random() - 0.5) * 2;
-                this.color = Math.random() > 0.5 ? '#ff7eb9' : '#fde047';
-            }
-            update() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                if (this.x > canvas.width) this.x = 0;
-                if (this.x < 0) this.x = canvas.width;
-                if (this.y > canvas.height) this.y = 0;
-                if (this.y < 0) this.y = canvas.height;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ctx.fill();
-            }
-        }
-
-        for (let i = 0; i < 50; i++) dots.push(new Dot());
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            dots.forEach(dot => {
-                dot.update();
-                dot.draw();
-            });
-            requestAnimationFrame(animate);
-        }
-        animate();
-
+        // PART 3: LAUNCH FUNCTION
         function launch() {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             document.getElementById('opening-screen').style.opacity = '0';
+            
             setTimeout(() => {
-                document.getElementById('opening-screen').style.display = 'none';
+                document.getElementById('opening-screen').classList.add('hidden');
                 document.getElementById('main-content').classList.remove('hidden');
-                document.getElementById('bar1').style.width = '85%';
-                document.getElementById('bar2').style.width = '100%';
+                
+                // Fix 1: Initialize AOS now that content is visible
+                AOS.init({ 
+                    duration: 1000, 
+                    once: true,
+                    offset: 100 
+                });
+                
+                // Fix 2: Start the bar observer
+                startObserver(); 
             }, 500);
         }
 
-        function finish() {
-            confetti({ particleCount: 300, spread: 100 });
-            document.getElementById('final-action').style.display = 'none';
-            document.getElementById('tbc-banner').classList.remove('hidden');
+        // PART 4: BAR ANIMATION LOGIC
+        function animateBars() {
+            const bar1 = document.getElementById('bar1');
+            const bar2 = document.getElementById('bar2');
+            if (bar1 && bar2) {
+                bar1.style.width = '85%';
+                bar2.style.width = '100%';
+            }
         }
 
-        // Cursor Animation Logic
-function createSparkle(e) {
-    const colors = ['#ff7eb9', '#fde047', '#ffffff', '#ff0080'];
-    const sparkle = document.createElement('div');
-    sparkle.className = 'cursor-sparkle';
-    
-    // Get position for both Mouse and Touch
-    let x = e.clientX || (e.touches && e.touches[0].clientX);
-    let y = e.clientY || (e.touches && e.touches[0].clientY);
-    
-    if (!x || !y) return;
+        // Fix 3: Wrap the observer in the startObserver function
+        function startObserver() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        animateBars();
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.5 });
 
-    sparkle.style.left = x + 'px';
-    sparkle.style.top = y + 'px';
-    sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            const target = document.querySelector('#vibe-check');
+            if (target) observer.observe(target);
+        }
+
+        // PART 5: FINISH & SPARKLES
+       function finish() {
+    // 1. Party time!
+    confetti({ 
+        particleCount: 300, 
+        spread: 100, 
+        origin: { y: 0.7 } 
+    });
+
+    // 2. Hide the gift
+    const giftBox = document.getElementById('final-action');
+    giftBox.style.display = 'none';
+
+    // 3. Show the banner
+    const banner = document.getElementById('tbc-banner');
+    banner.classList.remove('hidden');
     
-    document.body.appendChild(sparkle);
-
-    // Animate out
-    setTimeout(() => {
-        sparkle.style.transform = `translate(${(Math.random() - 0.5) * 50}px, ${(Math.random() - 0.5) * 50}px) scale(0)`;
-        sparkle.style.opacity = '0';
-    }, 50);
-
-    // Remove from DOM
-    setTimeout(() => sparkle.remove(), 600);
+    // 4. Force visibility and run the animation
+    banner.style.opacity = "1"; 
+    banner.style.animation = "zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards";
 }
+        function createSparkle(e) {
+            const colors = ['#ff7eb9', '#fde047', '#ffffff', '#ff0080'];
+            const sparkle = document.createElement('div');
+            sparkle.className = 'cursor-sparkle';
+            let x = e.clientX || (e.touches && e.touches[0].clientX);
+            let y = e.clientY || (e.touches && e.touches[0].clientY);
+            if (!x || !y) return;
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            document.body.appendChild(sparkle);
+            setTimeout(() => {
+                sparkle.style.transform = `translate(${(Math.random() - 0.5) * 50}px, ${(Math.random() - 0.5) * 50}px) scale(0)`;
+                sparkle.style.opacity = '0';
+            }, 50);
+            setTimeout(() => sparkle.remove(), 600);
+        }
 
-// Listen for mouse and touch movements
-window.addEventListener('mousemove', createSparkle);
-window.addEventListener('touchmove', (e) => {
-    // We don't want to spam TOO many particles on touch, so we filter
-    if (Math.random() > 0.5) createSparkle(e);
-}, { passive: true });
+        window.addEventListener('mousemove', createSparkle);
+        window.addEventListener('touchmove', (e) => {
+            if (Math.random() > 0.5) createSparkle(e);
+        }, { passive: true });
     </script>
 </body>
 </html>
