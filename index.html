@@ -135,6 +135,20 @@
     #main-content section:first-child {
         position: relative;
     }
+
+    #image-modal {
+    backdrop-filter: blur(8px);
+    transition: opacity 0.3s ease;
+}
+
+#modal-img {
+    transform: scale(0.9);
+    animation: zoomIn 0.3s forwards;
+}
+
+@keyframes zoomIn {
+    to { transform: scale(1); }
+}
     </style>
 </head>
 <body>
@@ -225,10 +239,10 @@
         <section class="py-16 px-4 bg-[#fff0f6]/90" data-aos="zoom-in">
             <h2 class="text-3xl font-black mb-8 text-center text-pink-500" style="font-family: 'Bungee';">GALLERY</h2>
             <div class="grid grid-cols-2 gap-3 max-w-md mx-auto">
-                <div class="casual-card h-40 overflow-hidden"><img src="assets/img1.jpeg" class="w-full h-full object-cover"></div>
-                <div class="casual-card h-40 overflow-hidden mt-4"><img src="assets/img2.jpeg" class="w-full h-full object-cover"></div>
-                <div class="casual-card h-40 overflow-hidden -mt-4"><img src="assets/img3.jpeg" class="w-full h-full object-cover"></div>
-                <div class="casual-card h-40 overflow-hidden"><img src="assets/img4.jpeg" class="w-full h-full object-cover"></div>
+                <div class="casual-card h-40 overflow-hidden"><img src="assets/img1.jpeg" alt="AGM Sem 3" onclick="openModal(this)" class="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-500"></div>
+                <div class="casual-card h-40 overflow-hidden mt-4"><img src="assets/img2.jpeg" alt="AGM Sem 2" onclick="openModal(this)" class="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-500"></div>
+                <div class="casual-card h-40 overflow-hidden -mt-4"><img src="assets/img3.jpeg" alt="Final day Sematan Class trip" onclick="openModal(this)" class="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-500"></div>
+                <div class="casual-card h-40 overflow-hidden"><img src="assets/img4.jpeg" alt="Sematan Class trip" onclick="openModal(this)" class="w-full h-full object-cover cursor-pointer hover:scale-110 transition-transform duration-500"></div>
             </div>
         </section>
 
@@ -241,30 +255,18 @@
         </section>
 
         <section class="py-20 px-6 text-center bg-[#fefce8]/90">
-            <div id="final-action" onclick="finish()" class="cursor-pointer">
+            <div id="final-action" onclick="spamConfetti()" class="cursor-pointer">
                 <div class="text-8xl mb-4 float-anim">🎉</div>
-                <p class="font-black text-pink-500 tracking-widest">SPAM IT!!</p>
+                <p class="font-black text-pink-500 tracking-widest">SPAM ME!!</p>
             </div>
-            <div id="tbc-banner" class="hidden flex justify-center items-center py-10 px-6">
-    <div class="relative bg-gradient-to-br from-pink-400 to-yellow-300 p-1 rounded-[2rem] shadow-[0_0_20px_rgba(255,126,185,0.5)] animate-pulse">
-        <div class="bg-white p-8 rounded-[1.8rem] text-center max-w-xs border-2 border-white/50">
-            <div class="text-6xl mb-4">⭐</div>
-            <h2 class="text-2xl font-black text-pink-500 uppercase leading-tight" style="font-family: 'Bungee';">
-                Level 21<br>Unlocked
-            </h2>
-            <div class="h-1 w-full bg-pink-100 my-4 rounded-full overflow-hidden">
-                <div class="h-full bg-pink-500 w-full animate-[shimmer_2s_infinite]"></div>
-            </div>
-            <p class="text-gray-600 font-bold text-sm tracking-widest uppercase">
-                Status: Legendary<br>
-                Luck: Infinite ✨
-            </p>
-            <p class="mt-6 text-xs italic text-pink-400 font-medium">"Subject Lya has successfully level up this year."</p>
-        </div>
-    </div>
-</div>
         </section>
     </div>
+
+    <div id="image-modal" class="hidden fixed inset-0 z-[100] bg-black/90 flex flex-col items-center justify-center p-4 cursor-pointer" onclick="closeModal()">
+    <img id="modal-img" class="max-w-full max-height-[70vh] rounded-lg shadow-2xl transition-transform duration-300" src="" alt="">
+    <p id="modal-desc" class="text-white mt-6 text-center max-w-md font-medium text-lg"></p>
+    <button class="absolute top-5 right-5 text-white text-3xl">&times;</button>
+</div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -340,26 +342,30 @@ animate();
             opening.appendChild(div);
         }
 
-        // PART 3: LAUNCH FUNCTION
-        function launch() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            document.getElementById('opening-screen').style.opacity = '0';
-            
-            setTimeout(() => {
-                document.getElementById('opening-screen').classList.add('hidden');
-                document.getElementById('main-content').classList.remove('hidden');
-                
-                // Fix 1: Initialize AOS now that content is visible
-                AOS.init({ 
-                    duration: 1000, 
-                    once: true,
-                    offset: 100 
-                });
-                
-                // Fix 2: Start the bar observer
-                startObserver(); 
-            }, 500);
-        }
+       function launch() {
+    confetti({ 
+        particleCount: 150, 
+        spread: 70, 
+        origin: { y: 0.6 },
+        zIndex: 999 // Ensures confetti stays below the modal
+    });
+    
+    document.getElementById('opening-screen').style.opacity = '0';
+    document.getElementById('opening-screen').style.pointerEvents = 'none'; // DISABLE clicks on opening screen
+    
+    setTimeout(() => {
+        document.getElementById('opening-screen').classList.add('hidden');
+        document.getElementById('main-content').classList.remove('hidden');
+        
+        AOS.init({ 
+            duration: 1000, 
+            once: true,
+            offset: 100 
+        });
+        
+        startObserver(); 
+    }, 500);
+}
 
         // PART 4: BAR ANIMATION LOGIC
         function animateBars() {
@@ -387,25 +393,31 @@ animate();
         }
 
         // PART 5: FINISH & SPARKLES
-       function finish() {
-    // 1. Party time!
+      function spamConfetti() {
+    // Standard pop
     confetti({ 
-        particleCount: 300, 
-        spread: 100, 
-        origin: { y: 0.7 } 
+        particleCount: 100, 
+        spread: 70, 
+        origin: { y: 0.8 },
+        colors: ['#ff7eb9', '#fde047', '#ffffff'],
+        zIndex: 999 
     });
 
-    // 2. Hide the gift
-    const giftBox = document.getElementById('final-action');
-    giftBox.style.display = 'none';
-
-    // 3. Show the banner
-    const banner = document.getElementById('tbc-banner');
-    banner.classList.remove('hidden');
-    
-    // 4. Force visibility and run the animation
-    banner.style.opacity = "1"; 
-    banner.style.animation = "zoomIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards";
+    // Side cannons for extra "spam" feel
+    confetti({
+        particleCount: 40,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0 },
+        zIndex: 999
+    });
+    confetti({
+        particleCount: 40,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1 },
+        zIndex: 999
+    });
 }
         function createSparkle(e) {
             const colors = ['#ff7eb9', '#fde047', '#ffffff', '#ff0080'];
@@ -429,6 +441,20 @@ animate();
         window.addEventListener('touchmove', (e) => {
             if (Math.random() > 0.5) createSparkle(e);
         }, { passive: true });
+
+        function openModal(imgElement) {
+    const modal = document.getElementById('image-modal');
+    const modalImg = document.getElementById('modal-img');
+    const modalDesc = document.getElementById('modal-desc');
+
+    modalImg.src = imgElement.src;
+    modalDesc.innerText = imgElement.alt; // Uses the alt text as the description
+    modal.classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('image-modal').classList.add('hidden');
+}
     </script>
 </body>
 </html>
